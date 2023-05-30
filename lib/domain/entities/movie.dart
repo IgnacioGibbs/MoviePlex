@@ -46,7 +46,7 @@ class Movie {
         title = '',
         video = false,
         voteAverage = 0.0,
-        voteCount = 0 {}
+        voteCount = 0;
 
   // Factory Constructor
   factory Movie.withTitle(String title) {
