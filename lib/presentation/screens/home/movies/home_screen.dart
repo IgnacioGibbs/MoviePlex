@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:movieplex/config/constants/environment.dart';
-
 class HomeScreen extends StatelessWidget {
   static const String name = 'home_screen';
 
@@ -13,8 +11,8 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('MoviePlex'),
       ),
-      body: Center(
-        child: Text(Environment.getTheMovieDbKey()),
+      body: const Center(
+        child: Text('Home Screen'),
       ),
     );
   }

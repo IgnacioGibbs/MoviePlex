@@ -1,5 +1,5 @@
 import 'package:movieplex/domain/entities/movie.dart';
 
-abstract class MovieDataSource {
-  Future<List<Movie>> getMovies({int page = 1});
+abstract class MoviesDataSource {
+  Future<List<Movie>> getNowPlaying({int page = 1});
 }
