@@ -27,37 +27,54 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   void initState() {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideshow = ref.watch(moviesSlideshowProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final upcomingMovies = ref.watch(upcomingMoviesProvider);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const CustomAppBar(),
-          MoviesSlideShow(movies: moviesSlideshow),
-          MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'Now Playing',
-            subtitle: 'Trending',
-            loadNextPage: () =>
-                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
-          ),
-          MovieHorizontalListview(
-            movies: nowPlayingMovies,
-            title: 'widget de prueba',
-            subtitle: 'widget de prueba',
-            loadNextPage: () =>
-                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
-          ),
-          const SizedBox(
-              height:
-                  10) //Para dar espacio en el fondo y se vea el rebote de la app
-        ],
+    return CustomScrollView(slivers: [
+      const SliverAppBar(
+        floating: true,
+        title: CustomAppBar(),
       ),
-    );
+      SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return Column(
+          children: [
+            MoviesSlideShow(movies: moviesSlideshow),
+            MovieHorizontalListview(
+              movies: nowPlayingMovies,
+              title: 'Now Playing',
+              subtitle: 'On billboard',
+              loadNextPage: () =>
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+            ),
+            MovieHorizontalListview(
+              movies: popularMovies,
+              title: 'Popular',
+              subtitle: 'More views',
+              loadNextPage: () =>
+                  ref.read(popularMoviesProvider.notifier).loadNextPage(),
+            ),
+            MovieHorizontalListview(
+              movies: upcomingMovies,
+              title: 'Upcoming',
+              subtitle: 'Expected releases',
+              loadNextPage: () =>
+                  ref.read(upcomingMoviesProvider.notifier).loadNextPage(),
+            ),
+            const SizedBox(
+                height:
+                    10) //Para dar espacio en el fondo y se vea el rebote de la app
+          ],
+        );
+      }, childCount: 1))
+    ]);
   }
 }
