@@ -1,5 +1,9 @@
 import 'package:animate_do/animate_do.dart';
+
 import 'package:flutter/material.dart';
+
+import 'package:go_router/go_router.dart';
+
 import 'package:movieplex/config/helpers/human_formats.dart';
 import 'package:movieplex/domain/entities/movie.dart';
 
@@ -98,7 +102,9 @@ class _Slide extends StatelessWidget {
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation(Colors.white)));
                 }
-                return FadeIn(child: child);
+                return GestureDetector(
+                    onTap: () => context.push('/movie/${movie.id}'),
+                    child: FadeIn(child: child));
               }),
             ),
           ),
