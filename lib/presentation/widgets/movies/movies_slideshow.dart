@@ -30,7 +30,8 @@ class MoviesSlideShow extends StatelessWidget {
             ),
           ),
           itemCount: movies.length,
-          itemBuilder: ((context, index) => _Slide(movie: movies[index])),
+          itemBuilder: ((context, index) =>
+              FadeInRight(child: _Slide(movie: movies[index]))),
         ));
   }
 }
