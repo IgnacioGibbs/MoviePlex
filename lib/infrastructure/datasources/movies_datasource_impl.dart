@@ -6,7 +6,7 @@ import 'package:movieplex/infrastructure/mappers/movie_mapper.dart';
 import 'package:movieplex/infrastructure/models/themoviedb/movie_details.dart';
 import 'package:movieplex/infrastructure/models/themoviedb/themoviedb_response.dart';
 
-class TheMovieDbDataSource extends MoviesDataSource {
+class MovieDataSource extends MoviesDataSource {
   final dio = Dio(
       BaseOptions(baseUrl: 'https://api.themoviedb.org/3', queryParameters: {
     'api_key': Environment.getTheMovieDbKey(),
