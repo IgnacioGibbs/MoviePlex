@@ -18,7 +18,9 @@ class MovieDataSource extends MoviesDataSource {
         TheMovieDbResponse.fromJson(json);
 
     final List<Movie> movies = theMovieDbResponse.results
-        .where((themoviedb) => themoviedb.posterPath != 'not_found')
+        .where((themoviedb) =>
+            themoviedb.posterPath !=
+            'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg')
         .map((themoviedb) => MovieMapper.theMovieDbToEntity(themoviedb))
         .toList();
 
@@ -65,5 +67,14 @@ class MovieDataSource extends MoviesDataSource {
     final Movie movie = MovieMapper.movieDetailsToEntity(movieDetails);
 
     return movie;
+  }
+
+  @override
+  Future<List<Movie>> searchMovie(String query) async {
+    final response = await dio.get('/search/movie', queryParameters: {
+      'query': query,
+    });
+
+    return _jsonToMovie(response.data);
   }
 }

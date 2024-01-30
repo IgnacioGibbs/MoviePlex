@@ -7,7 +7,7 @@ class MovieMapper {
       adult: themoviedb.adult,
       backdropPath: (themoviedb.backdropPath != '')
           ? 'https://image.tmdb.org/t/p/w300${themoviedb.backdropPath}'
-          : 'https://sd.keepcalms.com/i-w300/keep-calm-poster-not-found.png',
+          : 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg',
       genreIds: themoviedb.genreIds.map((e) => e.toString()).toList(),
       id: themoviedb.id,
       originalLanguage: themoviedb.originalLanguage,
@@ -16,8 +16,8 @@ class MovieMapper {
       popularity: themoviedb.popularity,
       posterPath: (themoviedb.posterPath != '')
           ? 'https://image.tmdb.org/t/p/w300${themoviedb.posterPath}'
-          : 'not_found',
-      releaseDate: themoviedb.releaseDate,
+          : 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg',
+      releaseDate: themoviedb.releaseDate ?? DateTime.now(),
       title: themoviedb.title,
       video: themoviedb.video,
       voteAverage: themoviedb.voteAverage,
@@ -27,7 +27,7 @@ class MovieMapper {
       adult: themoviedb.adult,
       backdropPath: (themoviedb.backdropPath != '')
           ? 'https://image.tmdb.org/t/p/w300${themoviedb.backdropPath}'
-          : 'https://sd.keepcalms.com/i-w300/keep-calm-poster-not-found.png',
+          : 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg',
       genreIds: themoviedb.genres.map((e) => e.name).toList(),
       id: themoviedb.id,
       originalLanguage: themoviedb.originalLanguage,
@@ -36,7 +36,7 @@ class MovieMapper {
       popularity: themoviedb.popularity,
       posterPath: (themoviedb.posterPath != '')
           ? 'https://image.tmdb.org/t/p/w300${themoviedb.posterPath}'
-          : 'https://sd.keepcalms.com/i-w300/keep-calm-poster-not-found.png',
+          : 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg',
       releaseDate: themoviedb.releaseDate,
       title: themoviedb.title,
       video: themoviedb.video,
