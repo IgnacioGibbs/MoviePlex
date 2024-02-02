@@ -8,7 +8,7 @@ class CastMapper {
       name: cast.name,
       profilePath: cast.profilePath != null
           ? 'https://image.tmdb.org/t/p/w500${cast.profilePath}'
-          : 'https://www.freeiconspng.com/uploads/no-image-icon-4.png',
+          : 'https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg',
       character: cast.character,
     );
   }

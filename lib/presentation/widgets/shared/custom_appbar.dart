@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:movieplex/domain/entities/movie.dart';
 
 import 'package:movieplex/presentation/delegates/search_movie_delegate.dart';
 import 'package:movieplex/presentation/providers/movies/movies_repository_provider.dart';
+
+import '../../providers/providers.dart';
 
 class CustomAppBar extends ConsumerWidget {
   const CustomAppBar({super.key});
@@ -27,17 +32,28 @@ class CustomAppBar extends ConsumerWidget {
                     Text('Movieplex', style: titleStyle),
                     const Spacer(),
                     IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        final moviesRepository =
-                            ref.read(movieRepositoryProvider);
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          final moviesRepository =
+                              ref.read(movieRepositoryProvider);
 
-                        showSearch(
-                            context: context,
-                            delegate: SearchMovieDelegate(
-                                searchMovies: moviesRepository.searchMovie));
-                      },
-                    ),
+                          final searchQuery = ref.read(searchMovieProvider);
+
+                          showSearch<Movie?>(
+                              query: searchQuery,
+                              context: context,
+                              delegate:
+                                  SearchMovieDelegate(searchMovies: (query) {
+                                ref
+                                    .read(searchMovieProvider.notifier)
+                                    .update((state) => query);
+                                return moviesRepository.searchMovie(query);
+                              })).then((movie) {
+                            if (movie != null) {
+                              context.push('/movie/${movie.id}');
+                            }
+                          });
+                        }),
                   ],
                 ))));
   }
