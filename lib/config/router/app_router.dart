@@ -1,32 +1,31 @@
 import 'package:go_router/go_router.dart';
 
 import 'package:movieplex/presentation/screens/screens.dart';
-import 'package:movieplex/presentation/views/views.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/home/0',
   routes: [
-    ShellRoute(
-        builder: (context, state, child) => HomeScreen(
-              childView: child,
-            ),
+    GoRoute(
+        path: '/home/:page',
+        name: HomeScreen.name,
+        builder: (context, state) {
+          final index = int.parse(state.pathParameters['page'] ?? '0');
+
+          if (index < 0 || index > 2) {
+            return const HomeScreen(pageIndex: 0);
+          }
+
+          return HomeScreen(pageIndex: index);
+        },
         routes: [
           GoRoute(
-              path: '/',
-              builder: (context, state) => const HomeView(),
-              routes: [
-                GoRoute(
-                    path: 'movie/:id',
-                    name: MovieScreen.name,
-                    builder: (context, state) {
-                      final movieId = state.pathParameters['id'] ?? 'no-id';
+              path: 'movie/:id',
+              name: MovieScreen.name,
+              builder: (context, state) {
+                final movieId = state.pathParameters['id'] ?? 'no-id';
 
-                      return MovieScreen(movieId: movieId);
-                    }),
-              ]),
-          GoRoute(
-              path: '/favorites',
-              builder: (context, state) => const FavoritesView()),
+                return MovieScreen(movieId: movieId);
+              }),
         ]),
   ],
 );
