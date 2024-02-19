@@ -1,4 +1,11 @@
+import 'package:isar/isar.dart';
+
+part 'movie.g.dart'; //This line is required to generate the file movie.g.dart
+
+@collection
 class Movie {
+  Id? isarId; //Whit this line, Isar will generate an id for us. Autoincrement and unique.
+
   final bool adult;
   final String backdropPath;
   final List<String> genreIds;
