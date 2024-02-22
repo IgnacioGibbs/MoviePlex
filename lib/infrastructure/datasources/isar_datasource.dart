@@ -32,9 +32,13 @@ class IsarDataSourceImpl implements LocalStorageDataSource {
   }
 
   @override
-  Future<bool> isMovieFavorite(int movieId) {
-    // TODO: implement isMovieFavorite
-    throw UnimplementedError();
+  Future<bool> isMovieFavorite(int movieId) async {
+    final isar = await db;
+
+    final Movie? movie =
+        await isar.movies.where().filter().idEqualTo(movieId).findFirst();
+
+    return movie != null;
   }
 
   @override
