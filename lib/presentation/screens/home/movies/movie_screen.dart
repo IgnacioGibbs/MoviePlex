@@ -194,13 +194,20 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+final isFavoriteProvider =
+    FutureProvider.family.autoDispose((ref, int movieId) {
+  final localStorageRepository = ref.watch(localStorageRepositoryProvider);
+  return localStorageRepository.isMovieFavorite(movieId);
+});
+
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
 
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
@@ -208,13 +215,26 @@ class _CustomSliverAppBar extends StatelessWidget {
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
       shadowColor: Colors.white60,
+      actions: [
+        IconButton(
+            onPressed: () {
+              ref
+                  .watch(localStorageRepositoryProvider)
+                  .toggleFavorite(movie)
+                  .then(
+                      (value) => ref.invalidate(isFavoriteProvider(movie.id)));
+            },
+            icon: isFavoriteFuture.when(
+              data: (isFavorite) => isFavorite
+                  ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                  : const Icon(Icons.favorite_border_rounded,
+                      color: Colors.white),
+              error: (error, stack) =>
+                  throw UnimplementedError('Error: $error, Stack: $stack'),
+              loading: () => const CircularProgressIndicator(strokeWidth: 2),
+            ))
+      ],
       flexibleSpace: FlexibleSpaceBar(
-        // titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        // title: Text(
-        //   movie.title,
-        //   style: const TextStyle(fontSize: 20),
-        //   textAlign: TextAlign.start,
-        // ),
         background: Stack(children: [
           SizedBox.expand(
             child: Image.network(
