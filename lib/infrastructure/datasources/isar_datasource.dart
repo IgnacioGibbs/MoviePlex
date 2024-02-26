@@ -4,13 +4,9 @@ import 'package:movieplex/domain/entities/movie.dart';
 import 'package:path_provider/path_provider.dart';
 
 class IsarDataSourceImpl implements LocalStorageDataSource {
-  late Future<Isar> db;
+  late final Future<Isar> db = _openDb();
 
-  IsarDataSourceImpl() {
-    db = openIsar();
-  }
-
-  Future<Isar> openIsar() async {
+  Future<Isar> _openDb() async {
     final dir = await getApplicationDocumentsDirectory();
 
     if (Isar.instanceNames.isEmpty) {
@@ -26,24 +22,33 @@ class IsarDataSourceImpl implements LocalStorageDataSource {
   }
 
   @override
-  Future<List<Movie>> getFavoriteMovies({int limit = 10, int offset = 0}) {
-    // TODO: implement getFavoriteMovies
-    throw UnimplementedError();
+  Future<List<Movie>> getFavoriteMovies(
+      {int limit = 10, int offset = 0}) async {
+    final isar = await db;
+
+    final allMovies = await isar.movies.where().findAll();
+    return allMovies.skip(offset).take(limit).toList();
   }
 
   @override
   Future<bool> isMovieFavorite(int movieId) async {
     final isar = await db;
 
-    final Movie? movie =
-        await isar.movies.where().filter().idEqualTo(movieId).findFirst();
+    final count = await isar.movies.where().filter().idEqualTo(movieId).count();
 
-    return movie != null;
+    return count > 0;
   }
 
   @override
-  Future<void> toggleFavorite(Movie movie) {
-    // TODO: implement toggleFavorite
-    throw UnimplementedError();
+  Future<void> toggleFavorite(Movie movie) async {
+    final isar = await db;
+
+    final isFavorite = await isMovieFavorite(movie.id);
+
+    if (isFavorite) {
+      isar.writeTxnSync(() => isar.movies.deleteSync(movie.isarId!));
+    } else {
+      isar.writeTxnSync(() => isar.movies.putSync(movie));
+    }
   }
 }
