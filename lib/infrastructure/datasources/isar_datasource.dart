@@ -43,12 +43,14 @@ class IsarDataSourceImpl implements LocalStorageDataSource {
   Future<void> toggleFavorite(Movie movie) async {
     final isar = await db;
 
-    final isFavorite = await isMovieFavorite(movie.id);
+    final favoriteMovie =
+        await isar.movies.filter().idEqualTo(movie.id).findFirst();
 
-    if (isFavorite) {
-      isar.writeTxnSync(() => isar.movies.deleteSync(movie.isarId!));
-    } else {
-      isar.writeTxnSync(() => isar.movies.putSync(movie));
+    if (favoriteMovie != null) {
+      isar.writeTxnSync(() => isar.movies.deleteSync(favoriteMovie.isarId!));
+      return;
     }
+
+    isar.writeTxnSync(() => isar.movies.putSync(movie));
   }
 }
